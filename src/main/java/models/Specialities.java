@@ -1,9 +1,9 @@
-package admin.models;
+package models;
 
 import lombok.Data;
 
 @Data
-public class Specialities extends admin.models.abs.Data {
+public class Specialities extends models.base.Data {
     private String speciality_name;
     private String speciality_role;
 

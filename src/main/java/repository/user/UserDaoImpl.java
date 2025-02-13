@@ -1,8 +1,8 @@
-package login.dao;
+package repository.user;
 
-import admin.connection.DBConnection;
-import login.model.User;
-import utility.LoginUtility;
+import connection.DBConnection;
+import models.User;
+import util.UserUtility;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
             while (rs.next()) {
                 User user = new User();
 
-                LoginUtility.userGetLoginData(rs, user);
+                UserUtility.userGetLoginData(rs, user);
                 users.add(user);
             }
         }
@@ -50,7 +50,7 @@ public class UserDaoImpl implements UserDao {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 User user = new User();
-                LoginUtility.userGetLoginData(rs, user);
+                UserUtility.userGetLoginData(rs, user);
                 users.add(user);
             }
         }
@@ -69,7 +69,7 @@ public class UserDaoImpl implements UserDao {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                LoginUtility.userGetLoginData(rs, user);
+                UserUtility.userGetLoginData(rs, user);
             }
         }
 

@@ -1,4 +1,4 @@
-package admin.models.abs;
+package models.base;
 
 
 import lombok.AllArgsConstructor;

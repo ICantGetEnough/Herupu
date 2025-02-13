@@ -1,13 +1,12 @@
-package UI;
+package view;
 
-import login.dao.UserDao;
-import login.dao.UserDaoImpl;
+import repository.user.UserDao;
+import repository.user.UserDaoImpl;
 
-import login.model.User;
-import org.jetbrains.annotations.NotNull;
-import service.UserService;
-import service.UserServiceImpl;
-import utility.ClientUtility;
+import models.User;
+import service.user.UserService;
+import service.user.UserServiceImpl;
+import util.ClientUtility;
 
 import java.util.Scanner;
 

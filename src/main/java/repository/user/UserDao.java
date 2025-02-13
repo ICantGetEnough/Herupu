@@ -1,6 +1,6 @@
-package login.dao;
+package repository.user;
 
-import login.model.User;
+import models.User;
 
 import java.util.List;
 

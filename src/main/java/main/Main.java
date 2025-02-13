@@ -1,8 +1,8 @@
 package main;
 
-import admin.connection.DBConnection;
-import UI.MenuImpl;
-import admin.dao.DoctorDaoImpl;
+import connection.DBConnection;
+import view.MenuImpl;
+import repository.doctor.DoctorDaoImpl;
 
 import java.sql.Connection;
 import java.sql.SQLException;

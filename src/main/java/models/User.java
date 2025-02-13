@@ -1,6 +1,6 @@
-package login.model;
+package models;
 
-import admin.models.abs.Hospital;
+import models.base.Hospital;
 import lombok.EqualsAndHashCode;
 
 import java.sql.SQLException;

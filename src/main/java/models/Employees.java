@@ -1,6 +1,6 @@
-package admin.models;
+package models;
 
-import admin.models.abs.Data;
+import models.base.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

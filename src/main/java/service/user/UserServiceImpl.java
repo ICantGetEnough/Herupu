@@ -1,8 +1,8 @@
-package service;
+package service.user;
 
-import login.dao.UserDao;
-import login.dao.UserDaoImpl;
-import login.model.User;
+import repository.user.UserDao;
+import repository.user.UserDaoImpl;
+import models.User;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

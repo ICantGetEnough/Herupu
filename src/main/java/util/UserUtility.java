@@ -1,10 +1,10 @@
-package utility;
+package util;
 
-import login.model.User;
+import models.User;
 
 import java.sql.ResultSet;
 
-public class LoginUtility {
+public class UserUtility {
     public static void userGetLoginData(ResultSet rs, User user) throws Exception {
         user.setId(rs.getLong("login_id"));
         user.setUsername(rs.getString("username"));

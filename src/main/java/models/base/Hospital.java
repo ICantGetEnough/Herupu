@@ -1,6 +1,5 @@
-package admin.models.abs;
+package models.base;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.sql.Date;
