@@ -24,4 +24,6 @@ public interface UserDao {
     void updatePassword(String username, String newPassword) throws Exception;
 
     int countLoginData() throws Exception;
+
+
 }

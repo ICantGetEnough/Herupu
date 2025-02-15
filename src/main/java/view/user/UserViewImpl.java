@@ -1,4 +1,4 @@
-package view;
+package view.user;
 
 import repository.user.UserDao;
 import repository.user.UserDaoImpl;
@@ -10,7 +10,7 @@ import util.ClientUtility;
 
 import java.util.Scanner;
 
-public class MenuImpl implements Menu {
+public class UserViewImpl implements UserView {
     private final User user = new User();
 
     @Override
@@ -28,7 +28,7 @@ public class MenuImpl implements Menu {
 
         String userStatus = userService.checkUserStatus(user.getUsername(), user.getPassword());
         if ("admin".equals(userStatus)) {
-            AdminMenu(sc);
+            LoginAdminMenu(sc);
         } else if ("user".equals(userStatus)) {
             System.out.println("User");
         } else {
@@ -70,7 +70,7 @@ public class MenuImpl implements Menu {
     }
 
     @Override
-    public void AdminMenu(Scanner sc) throws Exception {
+    public void LoginAdminMenu(Scanner sc) throws Exception {
         System.out.println("-- Login Admin Menu --");
         System.out.println("1.Get\n2.Insert\n3.Update\n4.Delete\n5.Exit");
         String query = sc.nextLine();
@@ -160,7 +160,7 @@ public class MenuImpl implements Menu {
                 break;
         }
 
-        AdminMenu(sc);
+        LoginAdminMenu(sc);
     }
 
     @Override
@@ -185,4 +185,6 @@ public class MenuImpl implements Menu {
             throw new IllegalArgumentException("Invalid code!");
         }
     }
+
+
 }

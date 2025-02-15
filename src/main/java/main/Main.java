@@ -1,7 +1,9 @@
 package main;
 
 import connection.DBConnection;
-import view.MenuImpl;
+import repository.doctor.DoctorDao;
+import service.doctor.DoctorServiceImpl;
+import view.user.UserViewImpl;
 import repository.doctor.DoctorDaoImpl;
 
 import java.sql.Connection;
@@ -10,23 +12,24 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        MenuImpl menu = new MenuImpl();
+        UserViewImpl menu = new UserViewImpl();
 
         Scanner scanner = new Scanner(System.in);
+
         Connection c = null;
 
         try {
             c = DBConnection.getConnection();
 
-//            menu.loginMenu(scanner);
+            DoctorDao doctorDao = new DoctorDaoImpl();
 
-            DoctorDaoImpl doctorDao = new DoctorDaoImpl();
+            DoctorServiceImpl doctorService = new DoctorServiceImpl(doctorDao);
 
-            doctorDao.getDoctors().forEach(System.out::println);
+            doctorService.findAllDoctors().forEach(System.out::println);
 
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if (c != null) {
                 try {
                     c.close();

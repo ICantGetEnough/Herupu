@@ -13,10 +13,6 @@ public class Doctor extends Specialities {
     private Integer salary;
     private Integer experience;
 
-    public Doctor(String name, String surname, String fin, String gender, Date birth_date) {
-        super();
-    }
-
     public Doctor() {
         super();
     }

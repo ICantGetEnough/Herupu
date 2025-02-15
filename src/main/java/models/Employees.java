@@ -8,7 +8,6 @@ import java.sql.Date;
 
 @lombok.Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Employees extends Data {
     private Integer data_id;
     private Integer speciality_id;

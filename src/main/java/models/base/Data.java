@@ -48,10 +48,10 @@ public abstract class Data extends Hospital {
 
     @Override
     public String toString() {
-        return super.toString() + ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", fin='" + fin + '\'' +
-                ", gender='" + gender + '\'' +
+        return super.toString() + ", name=" + name +
+                ", surname=" + surname +
+                ", fin=" + fin +
+                ", gender=" + gender +
                 ", birth_date=" + birth_date;
     }
 }
