@@ -21,6 +21,6 @@ public class Doctor extends Specialities {
     public String toString() {
         return super.toString() +
                 ", salary=" + salary +
-                ", experience=" + experience;
+                ", experience=" + experience ;
     }
 }

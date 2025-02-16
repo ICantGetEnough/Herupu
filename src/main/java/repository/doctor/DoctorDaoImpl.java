@@ -46,7 +46,7 @@ public class DoctorDaoImpl implements DoctorDao {
                 "where lower(name) like lower(?) or lower(surname) like lower(?) or lower(fin) like lower(?)" +
                 " or lower(speciality_name) like lower(?) or lower(speciality_role_name) like lower(?)";
 
-        try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql);){
+        try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
             ps.setString(1, "%" + keyword + "%");
             ps.setString(2, "%" + keyword + "%");
             ps.setString(3, "%" + keyword + "%");
@@ -54,7 +54,7 @@ public class DoctorDaoImpl implements DoctorDao {
             ps.setString(5, "%" + keyword + "%");
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Doctor doctor = new Doctor();
                 getDoctorData(rs, doctor);
                 doctors.add(doctor);
@@ -62,40 +62,6 @@ public class DoctorDaoImpl implements DoctorDao {
         }
 
         return doctors;
-    }
-
-    @Override
-    public Doctor getSpecialityName(String specialityName) throws SQLException {
-        String sql = "select speciality_name from hospital.specialities where speciality_name = ?";
-        Doctor doctor = new Doctor();
-
-        try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, specialityName);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    doctor.setSpeciality_name(rs.getString("speciality_name"));
-                    return doctor;
-                }
-            }
-        }
-
-        return doctor;
-    }
-
-    @Override
-    public Integer getIdBySpecialityName(String specialityName) throws SQLException {
-        String sql = "select speciality_role_id from speciality_roles where speciality_role_name = ?";
-
-        try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, specialityName);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    return rs.getInt("speciality_role_id");
-                }
-            }
-        }
-
-        return null;
     }
 
     @Override
@@ -128,7 +94,7 @@ public class DoctorDaoImpl implements DoctorDao {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    doctor.setData_id(rs.getInt("datas.data_id"));
+                    getDoctorData(rs, doctor);
                     return doctor;
                 }
             }
@@ -139,34 +105,102 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public void insertDoctor(Doctor doctor) throws SQLException {
-        String sql = "insert into datas (name, surname, fin, gender, birth_date) " +
-                "values (?, ?, ?, ?, ?) " +
-                "insert into doctors (data_id, speciality_id, salary, experience) " +
-                "values (select data_id from hospital.datas " +
-                "order by data_id desc limit 1, ?, ?, ?) ";
+    public Doctor getIdBySpecialityName(String name) throws SQLException {
+        String sql = "select speciality_id from hospital.specialities where speciality_name = ?";
+        Doctor doctor = new Doctor();
 
         try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    doctor.setSpeciality_id(rs.getInt("speciality_id"));
+
+                    return doctor;
+                }
+            }
+        }
+
+        return doctor;
+    }
+
+    @Override
+    public void insertDoctor(Doctor doctor) throws SQLException {
+        String sqlData = "INSERT INTO hospital.datas (name, surname, fin, gender, birth_date) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        String sqlDoctor = "INSERT INTO hospital.doctors (data_id, speciality_id, salary, experience) " +
+                "VALUES ((SELECT MAX(data_id) FROM hospital.datas), ?, ?, ?)";
+
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement psData = c.prepareStatement(sqlData);
+             PreparedStatement psDoctor = c.prepareStatement(sqlDoctor)) {
+
+            // Вставляем данные в hospital.datas
+            psData.setString(1, doctor.getName());
+            psData.setString(2, doctor.getSurname());
+            psData.setString(3, doctor.getFin());
+            psData.setString(4, doctor.getGender());
+            psData.setString(5, doctor.getBirth_date().toString());
+            psData.executeUpdate();
+
+            // Вставляем данные в hospital.doctors
+            psDoctor.setInt(1, doctor.getSpeciality_id());
+            psDoctor.setInt(2, doctor.getSalary());
+            psDoctor.setInt(3, doctor.getExperience());
+            psDoctor.executeUpdate();
+        }
+    }
+
+
+    @Override
+    public void updateDoctor(Doctor doctor) throws SQLException {
+        String sqlData = "update hospital.datas " +
+                "set name = ?, surname = ?, fin = ?, gender = ?, birth_date = ? " +
+                "where data_id = ? ;";
+
+        String sqlDoctor =
+                "update hospital.doctors " +
+                        "set data_id = ?, speciality_id = ?, salary = ?, experience = ? " +
+                        "where doctor_id = ?";
+
+        try (Connection c = DBConnection.getConnection();) {
+            PreparedStatement ps = c.prepareStatement(sqlData);
+            PreparedStatement ps1 = c.prepareStatement(sqlDoctor);
+
             ps.setString(1, doctor.getName());
             ps.setString(2, doctor.getSurname());
             ps.setString(3, doctor.getFin());
             ps.setString(4, doctor.getGender());
             ps.setString(5, doctor.getBirth_date().toString());
-            ps.setInt(6, doctor.getSpeciality_id());
-            ps.setInt(7, doctor.getSalary());
-            ps.setInt(8, doctor.getExperience());
+            ps.setInt(6, doctor.getData_id());
+
+            ps1.setInt(1, doctor.getData_id());
+            ps1.setInt(2, doctor.getSpeciality_id());
+            ps1.setInt(3, doctor.getSalary());
+            ps1.setInt(4, doctor.getExperience());
+            doctor.setId(Long.valueOf(doctor.getData_id()));
+            ps1.setLong(5, doctor.getId());
+
             ps.executeUpdate();
+            ps1.executeUpdate();
+
         }
     }
 
     @Override
-    public void updateDoctor(Doctor doctor) throws SQLException {
-        String sql = "update ";
-    }
-
-    @Override
     public void deleteDoctor(int id) throws SQLException {
+        String sqlData = "delete from hospital.doctors where data_id = ?";
+        String sqlDoctor = "delete from hospital.doctors where doctor_id = ?";
 
+        try (Connection c = DBConnection.getConnection();) {
+            PreparedStatement  psdDoctor = c.prepareStatement(sqlDoctor);
+            psdDoctor.setInt(1, id);
+            psdDoctor.executeUpdate();
+
+            PreparedStatement psData = c.prepareStatement(sqlData);
+            psData.setInt(1, id);
+            psData.executeUpdate();
+
+        }
     }
 
     public static void getDoctorData(ResultSet rs, Doctor doctor) throws SQLException {

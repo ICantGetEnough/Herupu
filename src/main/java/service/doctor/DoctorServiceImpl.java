@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class DoctorServiceImpl implements DoctorService {
-    private DoctorDao doctorDao;
+    private final DoctorDao doctorDao;
 
     public DoctorServiceImpl(DoctorDao doctorDao) {
         this.doctorDao = new DoctorDaoImpl();
@@ -31,12 +31,27 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void insertDoctor(Doctor doctor) throws SQLException {
-        doctorDao.insertDoctor(doctor);
+        Doctor specialityDoctor = doctorDao.getIdBySpecialityName(doctor.getSpeciality_name());
+
+        if (specialityDoctor != null) {
+            doctor.setSpeciality_id(specialityDoctor.getSpeciality_id());
+            doctorDao.insertDoctor(doctor);
+        } else {
+            throw new SQLException("Not found " + doctor.getSpeciality_name());
+        }
     }
+
 
     @Override
     public void updateDoctor(Doctor doctor) throws SQLException {
-        doctorDao.updateDoctor(doctor);
+        Doctor specialityDoctor = doctorDao.getIdBySpecialityName(doctor.getSpeciality_name());
+
+        if (specialityDoctor != null) {
+            doctor.setSpeciality_id(specialityDoctor.getSpeciality_id());
+            doctorDao.updateDoctor(doctor);
+        } else {
+            throw new SQLException("Not found " + doctor.getSpeciality_name());
+        }
     }
 
     @Override
