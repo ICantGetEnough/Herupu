@@ -1,6 +1,6 @@
 package util;
 
-import models.User;
+import models.user.User;
 
 import java.sql.ResultSet;
 

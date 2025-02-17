@@ -1,6 +1,6 @@
 package service.doctor;
 
-import models.Doctor;
+import models.doctor_employee.Doctor;
 
 import java.sql.SQLException;
 import java.util.List;

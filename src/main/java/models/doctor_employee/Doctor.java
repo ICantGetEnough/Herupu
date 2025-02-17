@@ -1,19 +1,17 @@
-package models;
+package models.doctor_employee;
 
-import models.base.Data;
+
 import lombok.AllArgsConstructor;
-
-import java.sql.Date;
 
 @lombok.Data
 @AllArgsConstructor
-public class Employee extends Speciality {
+public class Doctor extends Speciality {
     private Integer data_id;
     private Integer speciality_id;
     private Integer salary;
     private Integer experience;
 
-    public Employee() {
+    public Doctor() {
         super();
     }
 

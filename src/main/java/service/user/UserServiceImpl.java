@@ -2,7 +2,7 @@ package service.user;
 
 import repository.user.UserDao;
 import repository.user.UserDaoImpl;
-import models.User;
+import models.user.User;
 import lombok.AllArgsConstructor;
 
 import java.util.List;

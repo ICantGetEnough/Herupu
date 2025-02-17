@@ -1,4 +1,4 @@
-package models;
+package models.doctor_employee;
 
 import lombok.Data;
 

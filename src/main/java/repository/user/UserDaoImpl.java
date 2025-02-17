@@ -1,7 +1,7 @@
 package repository.user;
 
 import connection.DBConnection;
-import models.User;
+import models.user.User;
 import util.UserUtility;
 
 import java.sql.Connection;

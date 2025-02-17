@@ -1,8 +1,6 @@
 package repository.employee;
 
-import models.Doctor;
-import models.Employee;
-import repository.DataDao;
+import models.doctor_employee.Employee;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,6 +20,7 @@ public interface EmployeeDao {
 
     void updateEmployee(Employee employee) throws SQLException;
 
-    void deleteEmployee(int id) throws SQLException;
+    void deleteEmployee(Employee employee) throws SQLException;
 
+    Employee getEmployeeIdById(int id) throws SQLException;
 }

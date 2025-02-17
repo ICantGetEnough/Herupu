@@ -1,8 +1,7 @@
 package repository.doctor;
 
 import connection.DBConnection;
-import models.Doctor;
-import models.User;
+import models.doctor_employee.Doctor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

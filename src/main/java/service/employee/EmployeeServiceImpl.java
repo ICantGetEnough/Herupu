@@ -1,6 +1,6 @@
 package service.employee;
 
-import models.Employee;
+import models.doctor_employee.Employee;
 import repository.employee.EmployeeDao;
 
 import java.sql.SQLException;
@@ -64,7 +64,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteEmployee(int id) throws SQLException {
-        employeeDao.deleteEmployee(id);
+    public void deleteEmployee(Employee employee) throws SQLException {
+
+        Employee employeeId = employeeDao.getEmployeeIdById(employee.getData_id());
+
+        if (employeeId != null) {
+            employee.setId(Long.valueOf(employeeId.getData_id()));
+            employeeDao.deleteEmployee(employee);
+        } else {
+            throw new SQLException("Not found " + employee.getData_id());
+        }
+
     }
 }

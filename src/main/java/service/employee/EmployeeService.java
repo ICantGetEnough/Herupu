@@ -1,6 +1,6 @@
 package service.employee;
 
-import models.Employee;
+import models.doctor_employee.Employee;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -20,6 +20,6 @@ public interface EmployeeService {
 
     void updateEmployee(Employee employee) throws SQLException;
 
-    void deleteEmployee(int id) throws SQLException;
+    void deleteEmployee(Employee employee) throws SQLException;
 
 }

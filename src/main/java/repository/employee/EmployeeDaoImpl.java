@@ -1,15 +1,11 @@
 package repository.employee;
 
 import connection.DBConnection;
-import models.Doctor;
-import models.Employee;
-import repository.DataDao;
+import models.doctor_employee.Employee;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static repository.doctor.DoctorDaoImpl.getDoctorData;
 
 public class EmployeeDaoImpl implements EmployeeDao {
     @Override
@@ -186,20 +182,39 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public void deleteEmployee(int id) throws SQLException {
-        String sqlData = "delete from hospital.datas where data_id = ?";
+    public void deleteEmployee(Employee employee) throws SQLException {
         String sqlEmployee = "delete from hospital.employees where employee_id = ?";
+        String sqlData = "delete from hospital.datas where data_id = ?";
 
         try (Connection c = DBConnection.getConnection();) {
             PreparedStatement  psdEmployee = c.prepareStatement(sqlEmployee);
-            psdEmployee.setInt(1, id);
+            psdEmployee.setInt(1, employee.getData_id());
             psdEmployee.executeUpdate();
 
             PreparedStatement psData = c.prepareStatement(sqlData);
-            psData.setInt(1, id);
+            psData.setInt(1, employee.getData_id());
             psData.executeUpdate();
 
         }
+    }
+
+    @Override
+    public Employee getEmployeeIdById(int id) throws SQLException {
+        String sql = "select employee_id from hospital.employees where data_id = ?";
+        Employee employee = new Employee();
+
+        try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    employee.setId(rs.getLong("employee_id"));
+
+                    return employee;
+                }
+            }
+        }
+
+        return employee;
     }
 
     public static void getData(ResultSet rs, Employee employee) throws SQLException {

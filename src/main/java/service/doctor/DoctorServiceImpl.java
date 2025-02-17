@@ -1,7 +1,7 @@
 package service.doctor;
 
 import repository.doctor.DoctorDao;
-import models.Doctor;
+import models.doctor_employee.Doctor;
 import repository.doctor.DoctorDaoImpl;
 
 import java.sql.SQLException;

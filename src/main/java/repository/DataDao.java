@@ -1,10 +1,5 @@
 package repository;
 
-import models.Employee;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public interface DataDao {
 
     void setId(Long id);

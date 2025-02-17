@@ -1,6 +1,6 @@
 package view.doctor;
 
-import models.Doctor;
+import models.doctor_employee.Doctor;
 import repository.doctor.DoctorDao;
 import repository.doctor.DoctorDaoImpl;
 import service.doctor.DoctorServiceImpl;

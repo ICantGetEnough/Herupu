@@ -3,7 +3,7 @@ package view.user;
 import repository.user.UserDao;
 import repository.user.UserDaoImpl;
 
-import models.User;
+import models.user.User;
 import service.user.UserService;
 import service.user.UserServiceImpl;
 import util.ClientUtility;

@@ -1,12 +1,8 @@
 package view.employee;
 
-import models.Doctor;
-import models.Employee;
-import repository.doctor.DoctorDao;
-import repository.doctor.DoctorDaoImpl;
+import models.doctor_employee.Employee;
 import repository.employee.EmployeeDao;
 import repository.employee.EmployeeDaoImpl;
-import service.doctor.DoctorServiceImpl;
 import service.employee.EmployeeServiceImpl;
 
 import java.sql.Date;
@@ -120,7 +116,12 @@ public class EmployeeViewImpl implements EmployeeView {
             case "4":
                 System.out.println("Enter Id for deleting employee data: ");
                 int idDelete = sc.nextInt();
-                employeeService.deleteEmployee(idDelete);
+
+                Employee employee2 = new Employee();
+
+                employee2.setData_id(idDelete);
+
+                employeeService.deleteEmployee(employee2);
                 break;
             //Exit
             case "5":
