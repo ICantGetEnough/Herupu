@@ -4,6 +4,8 @@ import connection.DBConnection;
 import repository.doctor.DoctorDao;
 import service.doctor.DoctorServiceImpl;
 import view.doctor.DoctorViewImpl;
+import view.employee.EmployeeView;
+import view.employee.EmployeeViewImpl;
 import view.user.UserViewImpl;
 import repository.doctor.DoctorDaoImpl;
 
@@ -22,11 +24,13 @@ public class Main {
         try {
             c = DBConnection.getConnection();
 
-            DoctorViewImpl doctorView = new DoctorViewImpl();
+//            DoctorViewImpl doctorView = new DoctorViewImpl();
 
-            doctorView.doctorView(scanner);
+//            doctorView.doctorView(scanner);
 
-            DoctorDao doctorDao = new DoctorDaoImpl();
+            EmployeeView doctorDao = new EmployeeViewImpl();
+
+            doctorDao.employeeView(scanner);
 
 //            System.out.println(doctorDao.getIdBySpecialityName("Neurology"));
 

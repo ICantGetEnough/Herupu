@@ -3,11 +3,9 @@ package models;
 
 import lombok.AllArgsConstructor;
 
-import java.sql.Date;
-
 @lombok.Data
 @AllArgsConstructor
-public class Doctor extends Specialities {
+public class Doctor extends Speciality {
     private Integer data_id;
     private Integer speciality_id;
     private Integer salary;

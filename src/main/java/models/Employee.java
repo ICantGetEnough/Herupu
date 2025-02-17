@@ -2,20 +2,25 @@ package models;
 
 import models.base.Data;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
 @lombok.Data
 @AllArgsConstructor
-public class Employees extends Data {
+public class Employee extends Speciality {
     private Integer data_id;
     private Integer speciality_id;
     private Integer salary;
     private Integer experience;
 
-    public Employees(String name, String surname, String fin, String gender, Date birth_date) {
+    public Employee() {
         super();
     }
 
+    @Override
+    public String toString() {
+        return super.toString() +
+                ", salary=" + salary +
+                ", experience=" + experience ;
+    }
 }

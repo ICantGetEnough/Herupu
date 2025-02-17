@@ -1,45 +1,45 @@
-package repository.doctor;
+package repository.employee;
 
 import connection.DBConnection;
 import models.Doctor;
-import models.User;
+import models.Employee;
+import repository.DataDao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoctorDaoImpl implements DoctorDao {
+import static repository.doctor.DoctorDaoImpl.getDoctorData;
+
+public class EmployeeDaoImpl implements EmployeeDao {
     @Override
-    public List<Doctor> getDoctors() throws SQLException {
+    public List<Employee> getEmployee() throws SQLException {
         String sql = "select datas.data_id, name, surname, gender, fin, speciality_name," +
-                "speciality_role_name, salary, experience, birth_date from hospital.doctors d " +
-                "inner join hospital.datas on d.data_id = datas.data_id " +
-                "inner join hospital.specialities s on s.speciality_id = d.speciality_id " +
+                "speciality_role_name, salary, experience, birth_date from hospital.employees e " +
+                "inner join hospital.datas on e.data_id = datas.data_id " +
+                "inner join hospital.specialities s on s.speciality_id = e.speciality_id " +
                 "inner join hospital.speciality_roles sr on s.speciality_role_id = sr.speciality_role_id";
-        List<Doctor> doctors = new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
 
         try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Doctor doctor = new Doctor();
-                getDoctorData(rs, doctor);
-                doctors.add(doctor);
+                Employee employee = new Employee();
+                getData(rs, employee);
+                employees.add(employee);
             }
 
         }
-        return doctors;
+        return employees;
     }
 
     @Override
-    public List<Doctor> getDoctorByKeyword(String keyword) throws SQLException {
-        List<Doctor> doctors = new ArrayList<>();
+    public List<Employee> getEmployeeByKeyword(String keyword) throws SQLException {
+        List<Employee> employees = new ArrayList<>();
 
         String sql = "select datas.data_id, name, surname, gender, fin, speciality_name," +
-                "speciality_role_name, salary, experience, birth_date from hospital.doctors d " +
+                "speciality_role_name, salary, experience, birth_date from hospital.employees d " +
                 "inner join hospital.datas on d.data_id = datas.data_id " +
                 "inner join hospital.specialities s on s.speciality_id = d.speciality_id " +
                 "inner join hospital.speciality_roles sr on s.speciality_role_id = sr.speciality_role_id " +
@@ -55,18 +55,18 @@ public class DoctorDaoImpl implements DoctorDao {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Doctor doctor = new Doctor();
-                getDoctorData(rs, doctor);
-                doctors.add(doctor);
+                Employee employee = new Employee();
+                getData(rs, employee);
+                employees.add(employee);
             }
         }
 
-        return doctors;
+        return employees;
     }
 
     @Override
-    public Integer getDoctorCount() throws SQLException {
-        String sql = "select count(*) from hospital.doctors";
+    public Integer getEmployeeCount() throws SQLException {
+        String sql = "select count(*) from hospital.employees";
 
         try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
             try (ResultSet rs = ps.executeQuery()) {
@@ -80,11 +80,11 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public Doctor getDoctorById(int id) throws SQLException {
-        Doctor doctor = new Doctor();
+    public Employee getEmployeeById(int id) throws SQLException {
+        Employee employee = new Employee();
 
         String sql = "select datas.data_id, name, surname, gender, fin, speciality_name," +
-                "speciality_role_name, salary, experience, birth_date from hospital.doctors d " +
+                "speciality_role_name, salary, experience, birth_date from hospital.employees d " +
                 "inner join hospital.datas on d.data_id = datas.data_id " +
                 "inner join hospital.specialities s on s.speciality_id = d.speciality_id " +
                 "inner join hospital.speciality_roles sr on s.speciality_role_id = sr.speciality_role_id " +
@@ -94,40 +94,40 @@ public class DoctorDaoImpl implements DoctorDao {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    getDoctorData(rs, doctor);
-                    return doctor;
+                    getData(rs, employee);
+                    return employee;
                 }
             }
 
         }
 
-        return doctor;
+        return employee;
     }
 
     @Override
-    public Doctor getIdBySpecialityName(String name) throws SQLException {
+    public Employee getIdBySpecialityName(String name) throws SQLException {
         String sql = "select speciality_id from hospital.specialities where speciality_name = ?";
-        Doctor doctor = new Doctor();
+        Employee employee = new Employee();
 
         try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    doctor.setSpeciality_id(rs.getInt("speciality_id"));
+                    employee.setSpeciality_id(rs.getInt("speciality_id"));
 
-                    return doctor;
+                    return employee;
                 }
             }
         }
 
-        return doctor;
+        return employee;
     }
 
     @Override
-    public void insertDoctor(Doctor doctor) throws SQLException {
+    public void insertEmployee(Employee employee) throws SQLException {
         String sqlData = "INSERT INTO hospital.datas (name, surname, fin, gender, birth_date) " +
                 "VALUES (?, ?, ?, ?, ?)";
-        String sqlDoctor = "INSERT INTO hospital.doctors (data_id, speciality_id, salary, experience) " +
+        String sqlDoctor = "INSERT INTO hospital.employees (data_id, speciality_id, salary, experience) " +
                 "VALUES ((SELECT MAX(data_id) FROM hospital.datas), ?, ?, ?)";
 
         try (Connection c = DBConnection.getConnection();
@@ -135,50 +135,49 @@ public class DoctorDaoImpl implements DoctorDao {
              PreparedStatement psDoctor = c.prepareStatement(sqlDoctor)) {
 
             // Вставляем данные в hospital.datas
-            psData.setString(1, doctor.getName());
-            psData.setString(2, doctor.getSurname());
-            psData.setString(3, doctor.getFin());
-            psData.setString(4, doctor.getGender());
-            psData.setString(5, doctor.getBirth_date().toString());
+            psData.setString(1, employee.getName());
+            psData.setString(2, employee.getSurname());
+            psData.setString(3, employee.getFin());
+            psData.setString(4, employee.getGender());
+            psData.setString(5, employee.getBirth_date().toString());
             psData.executeUpdate();
 
             // Вставляем данные в hospital.doctors
-            psDoctor.setInt(1, doctor.getSpeciality_id());
-            psDoctor.setInt(2, doctor.getSalary());
-            psDoctor.setInt(3, doctor.getExperience());
+            psDoctor.setInt(1, employee.getSpeciality_id());
+            psDoctor.setInt(2, employee.getSalary());
+            psDoctor.setInt(3, employee.getExperience());
             psDoctor.executeUpdate();
         }
     }
 
-
     @Override
-    public void updateDoctor(Doctor doctor) throws SQLException {
+    public void updateEmployee(Employee employee) throws SQLException {
         String sqlData = "update hospital.datas " +
                 "set name = ?, surname = ?, fin = ?, gender = ?, birth_date = ? " +
                 "where data_id = ? ;";
 
-        String sqlDoctor =
-                "update hospital.doctors " +
+        String sqlEmployee =
+                "update hospital.employees " +
                         "set data_id = ?, speciality_id = ?, salary = ?, experience = ? " +
-                        "where doctor_id = ?";
+                        "where employee_id = ?";
 
         try (Connection c = DBConnection.getConnection();) {
             PreparedStatement ps = c.prepareStatement(sqlData);
-            PreparedStatement ps1 = c.prepareStatement(sqlDoctor);
+            PreparedStatement ps1 = c.prepareStatement(sqlEmployee);
 
-            ps.setString(1, doctor.getName());
-            ps.setString(2, doctor.getSurname());
-            ps.setString(3, doctor.getFin());
-            ps.setString(4, doctor.getGender());
-            ps.setString(5, doctor.getBirth_date().toString());
-            ps.setInt(6, doctor.getData_id());
+            ps.setString(1, employee.getName());
+            ps.setString(2, employee.getSurname());
+            ps.setString(3, employee.getFin());
+            ps.setString(4, employee.getGender());
+            ps.setString(5, employee.getBirth_date().toString());
+            ps.setInt(6, employee.getData_id());
 
-            ps1.setInt(1, doctor.getData_id());
-            ps1.setInt(2, doctor.getSpeciality_id());
-            ps1.setInt(3, doctor.getSalary());
-            ps1.setInt(4, doctor.getExperience());
-            doctor.setId(Long.valueOf(doctor.getData_id()));
-            ps1.setLong(5, doctor.getId());
+            ps1.setInt(1, employee.getData_id());
+            ps1.setInt(2, employee.getSpeciality_id());
+            ps1.setInt(3, employee.getSalary());
+            ps1.setInt(4, employee.getExperience());
+            employee.setId(Long.valueOf(employee.getData_id()));
+            ps1.setLong(5, employee.getId());
 
             ps.executeUpdate();
             ps1.executeUpdate();
@@ -187,14 +186,14 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public void deleteDoctor(int id) throws SQLException {
+    public void deleteEmployee(int id) throws SQLException {
         String sqlData = "delete from hospital.datas where data_id = ?";
-        String sqlDoctor = "delete from hospital.doctors where doctor_id = ?";
+        String sqlEmployee = "delete from hospital.employees where employee_id = ?";
 
         try (Connection c = DBConnection.getConnection();) {
-            PreparedStatement  psdDoctor = c.prepareStatement(sqlDoctor);
-            psdDoctor.setInt(1, id);
-            psdDoctor.executeUpdate();
+            PreparedStatement  psdEmployee = c.prepareStatement(sqlEmployee);
+            psdEmployee.setInt(1, id);
+            psdEmployee.executeUpdate();
 
             PreparedStatement psData = c.prepareStatement(sqlData);
             psData.setInt(1, id);
@@ -203,16 +202,16 @@ public class DoctorDaoImpl implements DoctorDao {
         }
     }
 
-    public static void getDoctorData(ResultSet rs, Doctor doctor) throws SQLException {
-        doctor.setId(rs.getLong("data_id"));
-        doctor.setName(rs.getString("name"));
-        doctor.setSurname(rs.getString("surname"));
-        doctor.setGender(rs.getString("gender"));
-        doctor.setFin(rs.getString("fin"));
-        doctor.setSpeciality_name(rs.getString("speciality_name"));
-        doctor.setSpeciality_role_name(rs.getString("speciality_role_name"));
-        doctor.setSalary(rs.getInt("salary"));
-        doctor.setExperience(rs.getInt("experience"));
-        doctor.setBirth_date(rs.getDate("birth_date"));
+    public static void getData(ResultSet rs, Employee employee) throws SQLException {
+        employee.setId(rs.getLong("data_id"));
+        employee.setName(rs.getString("name"));
+        employee.setSurname(rs.getString("surname"));
+        employee.setGender(rs.getString("gender"));
+        employee.setFin(rs.getString("fin"));
+        employee.setSpeciality_name(rs.getString("speciality_name"));
+        employee.setSpeciality_role_name(rs.getString("speciality_role_name"));
+        employee.setSalary(rs.getInt("salary"));
+        employee.setExperience(rs.getInt("experience"));
+        employee.setBirth_date(rs.getDate("birth_date"));
     }
 }

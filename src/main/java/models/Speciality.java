@@ -3,7 +3,7 @@ package models;
 import lombok.Data;
 
 @Data
-public class Specialities extends models.base.Data {
+public class Speciality extends models.base.Data {
     private String speciality_name;
     private String speciality_role_name;
     private Integer speciality_role_id;
