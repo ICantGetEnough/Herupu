@@ -117,11 +117,7 @@ public class EmployeeViewImpl implements EmployeeView {
                 System.out.println("Enter Id for deleting employee data: ");
                 int idDelete = sc.nextInt();
 
-                Employee employee2 = new Employee();
-
-                employee2.setData_id(idDelete);
-
-                employeeService.deleteEmployee(employee2);
+                employeeService.deleteEmployee(idDelete);
                 break;
             //Exit
             case "5":

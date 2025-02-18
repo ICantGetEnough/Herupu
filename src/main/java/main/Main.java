@@ -24,15 +24,6 @@ public class Main {
         try {
             c = DBConnection.getConnection();
 
-//            DoctorViewImpl doctorView = new DoctorViewImpl();
-
-//            doctorView.doctorView(scanner);
-
-            EmployeeView doctorDao = new EmployeeViewImpl();
-
-            doctorDao.employeeView(scanner);
-
-//            System.out.println(doctorDao.getIdBySpecialityName("Neurology"));
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -20,6 +20,6 @@ public interface EmployeeService {
 
     void updateEmployee(Employee employee) throws SQLException;
 
-    void deleteEmployee(Employee employee) throws SQLException;
+    void deleteEmployee(int id) throws SQLException;
 
 }

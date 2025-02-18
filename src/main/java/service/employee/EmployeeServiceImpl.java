@@ -41,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void insertEmployee(Employee employee) throws SQLException {
-      Employee employeeId = employeeDao.getIdBySpecialityName(employee.getSpeciality_name());
+        Employee employeeId = employeeDao.getIdBySpecialityName(employee.getSpeciality_name());
 
         if (employeeId != null) {
             employee.setSpeciality_id(employeeId.getSpeciality_id());
@@ -53,10 +53,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void updateEmployee(Employee employee) throws SQLException {
-        Employee employeeId = employeeDao.getIdBySpecialityName(employee.getSpeciality_name());
+        Employee id = employeeDao.getIdBySpecialityName(employee.getSpeciality_name());
+        Employee employeeId = employeeDao.getEmployeeIdById(employee.getData_id());
 
-        if (employeeId != null) {
-            employee.setSpeciality_id(employeeId.getSpeciality_id());
+        if (id != null) {
+            employee.setSpeciality_id(id.getSpeciality_id());
+            employee.setId(employeeId.getId());
             employeeDao.updateEmployee(employee);
         } else {
             throw new SQLException("Not found " + employee.getSpeciality_name());
@@ -64,16 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteEmployee(Employee employee) throws SQLException {
-
-        Employee employeeId = employeeDao.getEmployeeIdById(employee.getData_id());
-
-        if (employeeId != null) {
-            employee.setId(Long.valueOf(employeeId.getData_id()));
-            employeeDao.deleteEmployee(employee);
-        } else {
-            throw new SQLException("Not found " + employee.getData_id());
-        }
-
+    public void deleteEmployee(int id) throws SQLException {
+        employeeDao.deleteEmployee(id);
     }
 }

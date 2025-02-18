@@ -172,7 +172,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
             ps1.setInt(2, employee.getSpeciality_id());
             ps1.setInt(3, employee.getSalary());
             ps1.setInt(4, employee.getExperience());
-            employee.setId(Long.valueOf(employee.getData_id()));
             ps1.setLong(5, employee.getId());
 
             ps.executeUpdate();
@@ -182,17 +181,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public void deleteEmployee(Employee employee) throws SQLException {
+    public void deleteEmployee(int id) throws SQLException {
         String sqlEmployee = "delete from hospital.employees where employee_id = ?";
         String sqlData = "delete from hospital.datas where data_id = ?";
 
         try (Connection c = DBConnection.getConnection();) {
             PreparedStatement  psdEmployee = c.prepareStatement(sqlEmployee);
-            psdEmployee.setInt(1, employee.getData_id());
+            psdEmployee.setInt(1, id);
             psdEmployee.executeUpdate();
 
             PreparedStatement psData = c.prepareStatement(sqlData);
-            psData.setInt(1, employee.getData_id());
+            psData.setInt(1, id);
             psData.executeUpdate();
 
         }
