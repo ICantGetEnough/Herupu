@@ -17,8 +17,7 @@ public class DoctorViewImpl implements DoctorView {
         System.out.println("1.Get\n2.Insert\n3.Update\n4.Delete\n5.Exit");
         String query = sc.nextLine();
 
-        DoctorDao doctorDao = new DoctorDaoImpl();
-        DoctorServiceImpl doctorService = new DoctorServiceImpl(doctorDao);
+        DoctorServiceImpl doctorService = new DoctorServiceImpl();
 
         switch (query.trim().toLowerCase()) {
             //GET

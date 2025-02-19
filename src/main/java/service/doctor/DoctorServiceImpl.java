@@ -10,7 +10,7 @@ import java.util.List;
 public class DoctorServiceImpl implements DoctorService {
     private final DoctorDao doctorDao;
 
-    public DoctorServiceImpl(DoctorDao doctorDao) {
+    public DoctorServiceImpl() {
         this.doctorDao = new DoctorDaoImpl();
     }
 

@@ -24,7 +24,9 @@ public class Main {
         try {
             c = DBConnection.getConnection();
 
-
+//            EmployeeViewImpl empl = new EmployeeViewImpl();
+//
+//            empl.employeeView(scanner);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
