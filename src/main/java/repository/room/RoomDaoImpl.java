@@ -18,9 +18,9 @@ public class RoomDaoImpl implements RoomDao {
     public List<Room> getAllRoom() throws SQLException {
         List<Room> rooms = new ArrayList<Room>();
 
-        String sql = "select room_number, room_name, name, surname from room r " +
-                "join doctors d on d.doctor_id = r.doctor_id " +
-                "join datas on datas.data_id = d.data_id";
+        String sql = "select room_number, room_name, name, surname from hospital.rooms r " +
+                "join hospital.doctors d on d.doctor_id = r.doctor_id " +
+                "join hospital.datas on datas.data_id = d.data_id";
 
         try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -49,9 +49,9 @@ public class RoomDaoImpl implements RoomDao {
     public List<Room> getRoomByKeyword(String keyword) throws SQLException {
         List<Room> roomList = new ArrayList<>();
 
-        String sql = "select room_number, room_name, name, surname from room r " +
-                "join doctors d on d.doctor_id = r.doctor_id " +
-                "join datas on datas.data_id = d.data_id " +
+        String sql = "select room_number, room_name, name, surname from hospital.rooms r " +
+                "join hospital.doctors d on d.doctor_id = r.doctor_id " +
+                "join hospital.datas on datas.data_id = d.data_id " +
                 "where lower(name) like lower(?) or lower(surname) like ? or lower(fin) like lower(?) ";
 
         try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
@@ -78,10 +78,25 @@ public class RoomDaoImpl implements RoomDao {
     public List<Room> getRoomById(int id) throws SQLException {
         List<Room> roomList = new ArrayList<>();
 
-        String sql = "select room_number, room_name, name, surname from room r " +
-                "join doctors d on d.doctor_id = r.doctor_id " +
-                "join datas on datas.data_id = d.data_id " +
+        String sql = "select room_number, room_name, name, surname from hospital.rooms r " +
+                "join hospital.doctors d on d.doctor_id = r.doctor_id " +
+                "join hospital.datas on datas.data_id = d.data_id " +
                 "where room_id = ?";
+
+        try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Room room = new Room();
+                room.setRoom_number(rs.getInt("room_number"));
+                room.setRoom_name(rs.getString("room_name"));
+                Doctor data = new Doctor();
+                data.setName(rs.getString("name"));
+                data.setSurname(rs.getString("surname"));
+                room.setDoctor(data);
+                roomList.add(room);
+            }
+        }
 
         return roomList;
     }
@@ -120,21 +135,31 @@ public class RoomDaoImpl implements RoomDao {
 
     @Override
     public Room getDoctorIdByName(String name, String surname) throws SQLException {
-        String sql = "select doctor_id from hospital.doctors " +
+        String sql = "select doctor_id, name, surname from hospital.doctors d " +
+                "join hospital.datas da on d.data_id = da.data_id " +
                 "where lower(name) = lower(?) and lower(surname) = lower(?)";
-        Room room = new Room();
-        try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+
+        try (Connection c = DBConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
             ps.setString(1, name);
             ps.setString(2, surname);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                room.setId(rs.getLong("doctor_id"));
 
-                return room;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) { // Используем if вместо while, так как ожидаем одного доктора
+                    Doctor doctor = new Doctor();
+                    doctor.setId(rs.getLong("doctor_id"));
+                    doctor.setName(rs.getString("name")); // Добавлено
+                    doctor.setSurname(rs.getString("surname")); // Добавлено
+
+                    Room room = new Room();
+                    room.setDoctor(doctor);
+                    return room;
+                }
             }
         }
 
-        return room;
+        return null;
     }
 
     @Override

@@ -10,14 +10,10 @@ public class Room extends Hospital {
     String room_name;
     Doctor doctor;
 
-    public void setDoctor(String name, String surname){
-        this.doctor.getName() = name;
-    }
-
     @Override
     public String toString() {
         return "room_number=" + room_number +
-                ", room_name='" + room_name +
-                "name and surname=" + doctor.getName() + " " + doctor.getSurname();
+                ", room_name=" + room_name +
+                ", name and surname=" + doctor.getName() + " " + doctor.getSurname();
     }
 }
