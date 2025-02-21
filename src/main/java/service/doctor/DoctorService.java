@@ -19,4 +19,5 @@ public interface DoctorService {
     void deleteDoctor(int id) throws SQLException;
 
     Integer getDoctorCount() throws SQLException;
+    //Salam
 }
