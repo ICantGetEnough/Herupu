@@ -37,20 +37,32 @@ public class RoomServiceImpl implements RoomService {
 
         if (roomFromDb != null) {
 
-            doctor.setId(roomFromDb.getId());
+            doctor.setId(roomFromDb.getDoctor().getId());
 
             room.setDoctor(doctor);
 
             roomDao.saveRoom(room);
         } else {
-            System.out.println("Доктор не найден!");
+            System.out.println(room.getDoctor().getName() + " "
+                    + room.getDoctor().getSurname() + " не найден!");
         }
 
     }
 
     @Override
     public void updateRoom(Room room) throws SQLException {
-        roomDao.updateRoom(room);
+        Doctor doctor = new Doctor();
+        Room id = roomDao.getDoctorIdByName(room.getDoctor().getName(), room.getDoctor().getSurname());
+
+        if (id != null) {
+            doctor.setId(id.getDoctor().getId());
+            room.setDoctor(doctor);
+
+            roomDao.updateRoom(room);
+        } else {
+            System.out.println(room.getDoctor().getName() + " "
+                    + room.getDoctor().getSurname() + " не найден!");
+        }
     }
 
     @Override

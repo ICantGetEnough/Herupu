@@ -1,6 +1,7 @@
 package repository.doctor;
 
 import connection.DBConnection;
+import models.base.Gender;
 import models.doctor_employee.Doctor;
 
 import java.sql.Connection;
@@ -137,7 +138,7 @@ public class DoctorDaoImpl implements DoctorDao {
             psData.setString(1, doctor.getName());
             psData.setString(2, doctor.getSurname());
             psData.setString(3, doctor.getFin());
-            psData.setString(4, doctor.getGender());
+            psData.setString(4, String.valueOf(doctor.getGender()));
             psData.setString(5, doctor.getBirth_date().toString());
             psData.executeUpdate();
 
@@ -168,7 +169,7 @@ public class DoctorDaoImpl implements DoctorDao {
             ps.setString(1, doctor.getName());
             ps.setString(2, doctor.getSurname());
             ps.setString(3, doctor.getFin());
-            ps.setString(4, doctor.getGender());
+            ps.setString(4, String.valueOf(doctor.getGender()));
             ps.setString(5, doctor.getBirth_date().toString());
             ps.setInt(6, doctor.getData_id());
 
@@ -206,7 +207,7 @@ public class DoctorDaoImpl implements DoctorDao {
         doctor.setId(rs.getLong("data_id"));
         doctor.setName(rs.getString("name"));
         doctor.setSurname(rs.getString("surname"));
-        doctor.setGender(rs.getString("gender"));
+        doctor.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
         doctor.setFin(rs.getString("fin"));
         doctor.setSpeciality_name(rs.getString("speciality_name"));
         doctor.setSpeciality_role_name(rs.getString("speciality_role_name"));

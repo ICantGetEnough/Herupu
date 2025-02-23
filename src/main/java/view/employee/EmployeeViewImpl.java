@@ -1,5 +1,6 @@
 package view.employee;
 
+import models.base.Gender;
 import models.doctor_employee.Employee;
 import repository.employee.EmployeeDao;
 import repository.employee.EmployeeDaoImpl;
@@ -65,7 +66,7 @@ public class EmployeeViewImpl implements EmployeeView {
                 System.out.println("Enter employee fin: ");
                 employee.setFin(sc.nextLine());
                 System.out.println("Enter employee gender: ");
-                employee.setGender(sc.nextLine());
+                employee.setGender(Gender.valueOf(sc.nextLine().toUpperCase()));
                 System.out.println("Enter employee birth_date: ");
                 String birthDate = sc.nextLine();
                 java.util.Date utilDate = sdf.parse(birthDate);
@@ -97,7 +98,7 @@ public class EmployeeViewImpl implements EmployeeView {
                 System.out.println("Enter employee fin: ");
                 employee1.setFin(sc.nextLine());
                 System.out.println("Enter employee gender: ");
-                employee1.setGender(sc.nextLine());
+                employee1.setGender(Gender.valueOf(sc.nextLine().toUpperCase()));
                 System.out.println("Enter employee birth_date: ");
                 String birthDate1 = sc.nextLine();
                 java.util.Date utilDate1 = sdf1.parse(birthDate1);

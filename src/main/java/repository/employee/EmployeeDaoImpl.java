@@ -1,6 +1,7 @@
 package repository.employee;
 
 import connection.DBConnection;
+import models.base.Gender;
 import models.doctor_employee.Employee;
 
 import java.sql.*;
@@ -134,7 +135,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             psData.setString(1, employee.getName());
             psData.setString(2, employee.getSurname());
             psData.setString(3, employee.getFin());
-            psData.setString(4, employee.getGender());
+            psData.setString(4, String.valueOf(employee.getGender()));
             psData.setString(5, employee.getBirth_date().toString());
             psData.executeUpdate();
 
@@ -164,7 +165,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             ps.setString(1, employee.getName());
             ps.setString(2, employee.getSurname());
             ps.setString(3, employee.getFin());
-            ps.setString(4, employee.getGender());
+            ps.setString(4, String.valueOf(employee.getGender()));
             ps.setString(5, employee.getBirth_date().toString());
             ps.setInt(6, employee.getData_id());
 
@@ -220,7 +221,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         employee.setId(rs.getLong("data_id"));
         employee.setName(rs.getString("name"));
         employee.setSurname(rs.getString("surname"));
-        employee.setGender(rs.getString("gender"));
+        employee.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
         employee.setFin(rs.getString("fin"));
         employee.setSpeciality_name(rs.getString("speciality_name"));
         employee.setSpeciality_role_name(rs.getString("speciality_role_name"));

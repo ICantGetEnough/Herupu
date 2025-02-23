@@ -1,5 +1,6 @@
 package view.room;
 
+import main.Main;
 import models.doctor_employee.Doctor;
 import models.room.Room;
 import service.room.RoomServiceImpl;
@@ -54,10 +55,29 @@ public class RoomViewImpl implements RoomView {
                 roomService.saveRoom(room);
                 break;
             case "3":
+                System.out.println("Enter room id for updating: ");
+                room.setId(sc.nextLong());
+                System.out.println("Enter Room Number: ");
+                room.setRoom_number(sc.nextInt());
+                sc.nextLine();
+                System.out.println("Enter Room Name: ");
+                room.setRoom_name(sc.nextLine());
+                System.out.println("Enter Doctor Name: ");
+                doctor.setName(sc.nextLine());
+                System.out.println("Enter Doctor Surname: ");
+                doctor.setSurname(sc.nextLine());
+                room.setDoctor(doctor);
+
+                roomService.updateRoom(room);
                 break;
             case "4":
+                System.out.println("Enter the Room Number for delete: ");
+                room.setRoom_number(sc.nextInt());
+                sc.nextLine();
+                System.out.println("Enter Room Name: ");
+                room.setRoom_name(sc.nextLine());
+                roomService.deleteRoom(room);
                 break;
-
         }
     }
 }

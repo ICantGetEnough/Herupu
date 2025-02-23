@@ -12,7 +12,7 @@ public class Doctor extends Speciality {
     private Integer experience;
 
     public Doctor() {
-        super();
+
     }
 
     @Override

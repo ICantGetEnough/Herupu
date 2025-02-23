@@ -4,8 +4,6 @@ import connection.DBConnection;
 import models.doctor_employee.Doctor;
 import models.room.Room;
 
-import models.base.Data;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,9 +14,9 @@ import java.util.List;
 public class RoomDaoImpl implements RoomDao {
     @Override
     public List<Room> getAllRoom() throws SQLException {
-        List<Room> rooms = new ArrayList<Room>();
+        List<Room> rooms = new ArrayList<>();
 
-        String sql = "select room_number, room_name, name, surname from hospital.rooms r " +
+        String sql = "select room_id, room_number, room_name, name, surname from hospital.rooms r " +
                 "join hospital.doctors d on d.doctor_id = r.doctor_id " +
                 "join hospital.datas on datas.data_id = d.data_id";
 
@@ -26,6 +24,7 @@ public class RoomDaoImpl implements RoomDao {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Room room = new Room();
+                room.setId(rs.getLong("room_id"));
                 room.setRoom_number(rs.getInt("room_number"));
                 room.setRoom_name(rs.getString("room_name"));
 
@@ -49,7 +48,7 @@ public class RoomDaoImpl implements RoomDao {
     public List<Room> getRoomByKeyword(String keyword) throws SQLException {
         List<Room> roomList = new ArrayList<>();
 
-        String sql = "select room_number, room_name, name, surname from hospital.rooms r " +
+        String sql = "select room_id, room_number, room_name, name, surname from hospital.rooms r " +
                 "join hospital.doctors d on d.doctor_id = r.doctor_id " +
                 "join hospital.datas on datas.data_id = d.data_id " +
                 "where lower(name) like lower(?) or lower(surname) like ? or lower(fin) like lower(?) ";
@@ -61,6 +60,7 @@ public class RoomDaoImpl implements RoomDao {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Room room = new Room();
+                room.setId(rs.getLong("room_id"));
                 room.setRoom_number(rs.getInt("room_number"));
                 room.setRoom_name(rs.getString("room_name"));
                 Doctor data = new Doctor();
@@ -78,7 +78,7 @@ public class RoomDaoImpl implements RoomDao {
     public List<Room> getRoomById(int id) throws SQLException {
         List<Room> roomList = new ArrayList<>();
 
-        String sql = "select room_number, room_name, name, surname from hospital.rooms r " +
+        String sql = "select room_id, room_number, room_name, name, surname from hospital.rooms r " +
                 "join hospital.doctors d on d.doctor_id = r.doctor_id " +
                 "join hospital.datas on datas.data_id = d.data_id " +
                 "where room_id = ?";
@@ -88,6 +88,7 @@ public class RoomDaoImpl implements RoomDao {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Room room = new Room();
+                room.setId(rs.getLong("room_id"));
                 room.setRoom_number(rs.getInt("room_number"));
                 room.setRoom_name(rs.getString("room_name"));
                 Doctor data = new Doctor();
@@ -128,14 +129,30 @@ public class RoomDaoImpl implements RoomDao {
         }
     }
 
+    /*Что бы изменить данные кабинета
+    * изменить номер и имя кабинета
+    * изменить айди доктора
+    * что бы изменить айди доктора - мы должны найти его имя и фамилию
+    */
     @Override
-    public void updateRoom(Room room) throws SQLException {
-        String sql = "update";
+    public void
+    updateRoom(Room room) throws SQLException {
+        String sql = "update hospital.rooms " +
+                "set room_number = ? , room_name = ? , doctor_id = ? " +
+                "where room_id = ?";
+
+        try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, room.getRoom_number());
+            ps.setString(2, room.getRoom_name());
+            ps.setLong(3, room.getDoctor().getId());
+            ps.setLong(4, room.getId());
+            ps.executeUpdate();
+        }
     }
 
     @Override
     public Room getDoctorIdByName(String name, String surname) throws SQLException {
-        String sql = "select doctor_id, name, surname from hospital.doctors d " +
+        String sql = "select doctor_id from hospital.doctors d " +
                 "join hospital.datas da on d.data_id = da.data_id " +
                 "where lower(name) = lower(?) and lower(surname) = lower(?)";
 
@@ -145,17 +162,15 @@ public class RoomDaoImpl implements RoomDao {
             ps.setString(1, name);
             ps.setString(2, surname);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) { // Используем if вместо while, так как ожидаем одного доктора
-                    Doctor doctor = new Doctor();
-                    doctor.setId(rs.getLong("doctor_id"));
-                    doctor.setName(rs.getString("name")); // Добавлено
-                    doctor.setSurname(rs.getString("surname")); // Добавлено
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) { // Используем if вместо while, так как ожидаем одного доктора
+                Doctor doctor = new Doctor();
+                doctor.setId(rs.getLong("doctor_id"));
 
-                    Room room = new Room();
-                    room.setDoctor(doctor);
-                    return room;
-                }
+                Room room = new Room();
+                room.setDoctor(doctor);
+                return room;
+
             }
         }
 
@@ -164,6 +179,13 @@ public class RoomDaoImpl implements RoomDao {
 
     @Override
     public void deleteRoom(Room room) throws SQLException {
+        String sql = "delete from hospital.rooms where lower(room_number) = lower(?) " +
+                "and lower(room_name) = lower(?)";
 
+        try (Connection c = DBConnection.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setLong(1, room.getRoom_number());
+            ps.setString(2, room.getRoom_name());
+            ps.executeUpdate();
+        }
     }
 }

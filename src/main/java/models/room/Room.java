@@ -12,8 +12,8 @@ public class Room extends Hospital {
 
     @Override
     public String toString() {
-        return "room_number=" + room_number +
-                ", room_name=" + room_name +
-                ", name and surname=" + doctor.getName() + " " + doctor.getSurname();
+        return super.toString() + ", room_number = " + room_number +
+                ", room_name = " + room_name +
+                ", name and surname = " + doctor.getName() + " " + doctor.getSurname();
     }
 }

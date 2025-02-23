@@ -1,5 +1,6 @@
 package view.doctor;
 
+import models.base.Gender;
 import models.doctor_employee.Doctor;
 import repository.doctor.DoctorDao;
 import repository.doctor.DoctorDaoImpl;
@@ -63,7 +64,7 @@ public class DoctorViewImpl implements DoctorView {
                 System.out.println("Enter doctor fin: ");
                 doctor.setFin(sc.nextLine());
                 System.out.println("Enter doctor gender: ");
-                doctor.setGender(sc.nextLine());
+                doctor.setGender(Gender.valueOf(sc.nextLine().toUpperCase()));
                 System.out.println("Enter doctor birth_date: ");
                 String birthDate = sc.nextLine();
                 java.util.Date utilDate = sdf.parse(birthDate);
@@ -95,7 +96,7 @@ public class DoctorViewImpl implements DoctorView {
                 System.out.println("Enter doctor fin: ");
                 doctor1.setFin(sc.nextLine());
                 System.out.println("Enter doctor gender: ");
-                doctor1.setGender(sc.nextLine());
+                doctor1.setGender(Gender.valueOf(sc.nextLine().toUpperCase()));
                 System.out.println("Enter doctor birth_date: ");
                 String birthDate1 = sc.nextLine();
                 java.util.Date utilDate1 = sdf1.parse(birthDate1);

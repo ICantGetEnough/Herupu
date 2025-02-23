@@ -29,7 +29,7 @@ public class Main {
             System.out.println("1.Doctor\n2.Employee\n3.Room");
             String chooseId = scanner.nextLine();
 
-            switch (chooseId) {
+            switch (chooseId.trim()) {
                 case "1":
                     DoctorViewImpl doctorView = new DoctorViewImpl();
                     doctorView.doctorView(scanner);
@@ -42,10 +42,10 @@ public class Main {
                     RoomView roomView = new RoomViewImpl();
                     roomView.roomView(scanner);
                     break;
-                default:
-                    args = null;
-                    main(args);
             }
+
+            args = null;
+            main(args);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

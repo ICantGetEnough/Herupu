@@ -9,17 +9,12 @@ import java.sql.SQLException;
 
 @EqualsAndHashCode(callSuper = true)
 @lombok.Data
-@AllArgsConstructor
 public abstract class Data extends Hospital {
     private String name;
     private String surname;
     private String fin;
-    private String gender;
+    private Gender gender;
     private Date birth_date;
-
-    public Data() {
-        super();
-    }
 
     public void setFin(String fin) throws SQLException {
         if (fin.length() == 6){
@@ -29,12 +24,12 @@ public abstract class Data extends Hospital {
         }
     }
 
-    public void setGender(String gender) throws SQLException {
+    public void setGender(Gender gender) throws SQLException {
         String[] genders = new String[]{"male", "female", "other"};
         boolean isTrue = false;
 
         for (String g : genders){
-            if (g.equals(gender)){
+            if (g.equalsIgnoreCase(gender.toString())){
                 isTrue = true;
             }
         }
